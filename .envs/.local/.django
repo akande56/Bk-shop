@@ -1,0 +1,13 @@
+# General
+# ------------------------------------------------------------------------------
+USE_DOCKER=yes
+IPYTHONDIR=/app/.ipython
+# General Settings
+DJANGO_SETTINGS_MODULE=config.settings.local  # Points to the local settings file
+DJANGO_SECRET_KEY=lkjljlkjlkj4lk3j4lkj3d,,.             # A random, secure secret key for Django
+
+# Debug Settings
+DJANGO_DEBUG=True                             # Enables debug mode for local development
+
+# Allowed Hosts
+DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1     # Local development hosts

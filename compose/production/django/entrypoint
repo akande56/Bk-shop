@@ -1,17 +1,22 @@
 #!/bin/bash
 
-set -o errexit
-set -o pipefail
-set -o nounset
+set -o errexit  # Exit immediately if a command exits with a non-zero status
+set -o pipefail # Exit immediately if a pipeline command fails
+set -o nounset  # Treat unset variables as an error
 
-# if [ -z "${POSTGRES_USER}" ]; then
-#     base_postgres_image_default_user='postgres'
-#     export POSTGRES_USER="${base_postgres_image_default_user}"
-# fi
-export DATABASE_URL="postgres://postgres.xhsoxxxvhgqmjdebdtan:krakof1998..,,@aws-0-eu-central-1.pooler.supabase.com:5432/postgres"
+# Ensure DATABASE_URL is provided
+: "${DATABASE_URL:?DATABASE_URL is required but not set}"
 
+# Parse DATABASE_URL to extract host and port if not explicitly set
+if [ -z "${POSTGRES_HOST:-}" ] || [ -z "${POSTGRES_PORT:-}" ]; then
+    export POSTGRES_HOST=$(echo "$DATABASE_URL" | awk -F[@:/] '{print $4}')
+    export POSTGRES_PORT=$(echo "$DATABASE_URL" | awk -F[@:/] '{print $5}')
+fi
+
+# Check PostgreSQL availability
 wait-for-it "${POSTGRES_HOST}:${POSTGRES_PORT}" -t 30
 
 >&2 echo 'PostgreSQL is available'
 
+# Execute the provided command (e.g., run Django server or migrations)
 exec "$@"

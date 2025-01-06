@@ -78,8 +78,7 @@ RUN chown -R django:django ${APP_HOME}
 
 USER django
 
-RUN DATABASE_URL="" \
-  DJANGO_SETTINGS_MODULE="config.settings.production" \
-  python manage.py compilemessages
+RUN DJANGO_SETTINGS_MODULE="config.settings.production" \
+    python manage.py compilemessages
 
 ENTRYPOINT ["/entrypoint"]
